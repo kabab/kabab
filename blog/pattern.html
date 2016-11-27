@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Kabab's blog</title>
+  </head>
+  <body>
+    <h1>Number of possibilities in android code pattern</h1>
+    <p>As you know the article is about Android pattern, a security system made by android, that will lock your android smartphone, the security system use a 3-by-3 node grid, the password is the connection between this nodes (I think everybody have seeing it).</p>
+
+<img src="pattern.png" alt="Screenshot_139" width="197" height="214" />
+
+<p>My goal was to calculate the number of all possible patterns that we can use to lock an android phone, so I started searching using my limited knowledge in mathematics and combinatorics, and I really didn't go so far, the difficulty was in the special cases, when the pattern contain more than 3 nodes. Knowing that a pattern should contain at least 4 nodes, and visiting a node just one time each (that 's called Hamiltonian path in graph theory).
+
+Lets give each node a number in the pattern,</p>
+<pre>
+1 2 3
+
+4 5 6
+
+7 8 9
+</pre>
+
+A password is the combination of this number for example (1, 2, 3, 4), (5, 3, 6, 8, 7, 4, 1) or (1, 5, 9, 8, 7, 3), there's some other illegal examples like :
+<ul>
+	<li>(1, 2, 3) : This contains just 3 nodes, so it can't be a password</li>
+	<li>(4, 6, 3, 2) : This go from 4 to 6 and without selecting 5, we can go from 4 to 6 only if 5 is already selected</li>
+	<li>(7, 3, 1, 7)  :  Here we select 7 twice, as you know it's not possible.</li>
+</ul>
+<p>So to count the number of possibilities I made a sample script with python that will do that.</p>
+
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42</pre></td><td><pre style="margin: 0; line-height: 125%">count <span style="color: #333333">=</span> [<span style="color: #0000DD; font-weight: bold">0</span>] <span style="color: #333333">*</span> <span style="color: #0000DD; font-weight: bold">10</span>
+
+<span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">middle</span>(a, b):
+    <span style="color: #008800; font-weight: bold">if</span> (a<span style="color: #333333">+</span>b) <span style="color: #333333">%</span> <span style="color: #0000DD; font-weight: bold">2</span> <span style="color: #333333">!=</span> <span style="color: #0000DD; font-weight: bold">0</span>:
+        <span style="color: #008800; font-weight: bold">return</span> <span style="color: #007020">None</span>
+    mid <span style="color: #333333">=</span> (a<span style="color: #333333">+</span>b)<span style="color: #333333">/</span><span style="color: #0000DD; font-weight: bold">2</span>
+    <span style="color: #008800; font-weight: bold">if</span> mid <span style="color: #333333">==</span> <span style="color: #0000DD; font-weight: bold">5</span>:
+        <span style="color: #008800; font-weight: bold">return</span> mid
+    <span style="color: #008800; font-weight: bold">if</span> a<span style="color: #333333">%</span><span style="color: #0000DD; font-weight: bold">3</span> <span style="color: #333333">==</span> b<span style="color: #333333">%</span><span style="color: #0000DD; font-weight: bold">3</span>:
+        <span style="color: #008800; font-weight: bold">return</span> mid
+    <span style="color: #008800; font-weight: bold">if</span> (a<span style="color: #333333">+</span>b) <span style="color: #333333">%</span> <span style="color: #0000DD; font-weight: bold">3</span> <span style="color: #333333">==</span> <span style="color: #0000DD; font-weight: bold">1</span>:
+        <span style="color: #008800; font-weight: bold">return</span> mid
+    <span style="color: #008800; font-weight: bold">return</span> <span style="color: #007020">None</span>
+
+<span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">poss</span>(l<span style="color: #333333">=</span>[]):
+    <span style="color: #008800; font-weight: bold">if</span> <span style="color: #007020">len</span>(l) <span style="color: #333333">==</span> <span style="color: #0000DD; font-weight: bold">0</span>:
+        <span style="color: #008800; font-weight: bold">for</span> x <span style="color: #000000; font-weight: bold">in</span> <span style="color: #007020">range</span>(<span style="color: #0000DD; font-weight: bold">1</span>, <span style="color: #0000DD; font-weight: bold">10</span>):
+            <span style="color: #008800; font-weight: bold">yield</span> x
+        <span style="color: #008800; font-weight: bold">return</span>
+    <span style="color: #008800; font-weight: bold">for</span> x <span style="color: #000000; font-weight: bold">in</span> <span style="color: #007020">range</span>(<span style="color: #0000DD; font-weight: bold">1</span>,<span style="color: #0000DD; font-weight: bold">10</span>):
+        mid <span style="color: #333333">=</span> middle(x, l[<span style="color: #333333">-</span><span style="color: #0000DD; font-weight: bold">1</span>])
+        <span style="color: #008800; font-weight: bold">if</span> (x <span style="color: #000000; font-weight: bold">not</span> <span style="color: #000000; font-weight: bold">in</span> l) <span style="color: #000000; font-weight: bold">and</span> (mid <span style="color: #000000; font-weight: bold">in</span> l <span style="color: #000000; font-weight: bold">or</span> mid <span style="color: #333333">==</span> <span style="color: #007020">None</span>):
+           <span style="color: #008800; font-weight: bold">yield</span> x
+
+<span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">comb</span>(l<span style="color: #333333">=</span>[]):
+    ll <span style="color: #333333">=</span> <span style="color: #007020">len</span>(l);
+    <span style="color: #008800; font-weight: bold">if</span> ll <span style="color: #333333">==</span> <span style="color: #0000DD; font-weight: bold">10</span>:
+        <span style="color: #008800; font-weight: bold">return</span>
+    <span style="color: #008800; font-weight: bold">global</span> count
+    t <span style="color: #333333">=</span> <span style="color: #007020">list</span>(poss(l))
+    <span style="color: #888888"># print t</span>
+    <span style="color: #008800; font-weight: bold">if</span> ll <span style="color: #333333">&gt;=</span> <span style="color: #0000DD; font-weight: bold">4</span>:
+        count[ll] <span style="color: #333333">=</span> count[ll] <span style="color: #333333">+</span> <span style="color: #0000DD; font-weight: bold">1</span>
+    <span style="color: #008800; font-weight: bold">for</span> x <span style="color: #000000; font-weight: bold">in</span> t:
+        comb(l <span style="color: #333333">+</span> [x])
+
+<span style="color: #888888"># print list(poss([x]))</span>
+
+comb()
+
+<span style="color: #008800; font-weight: bold">print</span> count
+<span style="color: #008800; font-weight: bold">print</span> <span style="background-color: #fff0f0">&quot;The number of all possibilities is : </span><span style="background-color: #eeeeee">%i</span><span style="background-color: #fff0f0">&quot;</span> <span style="color: #333333">%</span> <span style="color: #007020">sum</span>(count)
+</pre></td></tr></table></div>
+
+<p>The first function middle will give us the middle node between two nodes, for example, middle(4,6) will return 5, if two nodes don't have a middle, the function will return None, the second function, poss, take as parameter a list of numbers l, the list is a pattern of length n, so the function will return all the pattern possibilities of length n+1, and that start with l list, the last function comb is the main function it will generate all the possibilities and count them, the result will be accumulated to the count variable.
+The result of the this script will be :</p>
+<pre>[0, 0, 0, 0, 1624, 7152, 26016, 72912, 140704, 140704]
+ The number of all possibilities is : 389112</pre>
+  </body>
+</html>
+<hr></hr>
+<a href="http://kabab.github.io/" >[HOME]</a>
